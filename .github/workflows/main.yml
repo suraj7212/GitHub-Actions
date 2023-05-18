@@ -1,1 +1,40 @@
-# first workflow 
+name: The first workflow
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  
+  workflow_dispatch:
+
+jobs:
+  
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: run a one line script
+        run: Echo Hello, world!
+
+      - name: run a multi-line script
+        run: |
+           echo add other actions to build,
+           echo test and deploy your project.
+  
+  build-api:
+    runs-on: windows-latest
+    steps:
+      - run: echo building api
+  
+  build-db:
+    needs: build-app
+    runs-on: windows-latest
+    steps:
+      - run: echo "Hello windows"
+  
+  package:
+    needs: [build-app, build-db:]
+    runs-on: macos-latest
+    steps:
+      - run: echo "hello macos"
